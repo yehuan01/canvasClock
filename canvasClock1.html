@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body,html {
+				margin: 0;
+				padding: 0;
+			}
+			canvas{
+				display: block;
+				margin: 20px auto;
+				border:1px dashed #999;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="can" height="500" width="500"></canvas>
+		<script type="text/javascript">
+			var can = document.getElementById("can").getContext("2d");
+			
+			function clock(){
+				var time = new Date();
+				h = time.getHours();
+				m = time.getMinutes();
+				s = time.getSeconds();
+				can.clearRect(-250,-250,500,500);
+				can.restore();
+				can.save();
+				plane();
+				scale();
+				hour(h,m,s);
+				minute(m);
+				second(s);
+			};
+			can.translate(250,250);
+			clock();
+			setInterval(clock,1);
+			//画表盘
+			function plane(){
+				can.beginPath();
+				can.strokeStyle = "#3ae4d7";
+				can.lineWidth = 15;
+				can.arc(0,0,150,0,2*Math.PI);
+				can.closePath();//封闭路径
+				can.stroke();	
+			}
+			
+			//画刻度
+			function scale(){
+				can.save();
+				can.beginPath();
+				can.strokeStyle = "#000";
+				can.lineWidth = 5;
+				//画时针刻度
+				for(var i = 0; i<60;i++){
+					can.rotate((2/60)*Math.PI);
+					can.moveTo(0,120);
+					can.lineTo(0,130);
+					can.stroke();
+				};
+				
+				//画分针刻度
+				for(var i = 0 ; i<12;i++){
+					can.rotate((2/12)*Math.PI);
+					can.moveTo(0,115);
+					can.lineTo(0,130);
+					can.stroke();
+				};
+			};
+			
+			//制作时针
+			function hour(h,m,s){
+				var time = 12*60*60*1000;
+				var nTime = h*60*60 + m*60 + s;
+				can.beginPath();
+				can.restore();
+				can.save();
+				can.lineWidth = 5;
+				can.strokeStyle = "#000";
+				can.rotate((2/time)*nTime*Math.PI);
+				can.moveTo(0,20);
+				can.lineTo(0,-70);
+				can.stroke();
+			};
+			
+			//制作分针
+			function minute(m){
+				
+				can.restore();
+				can.save();
+				can.beginPath();
+				can.strokeStyle = "#000";
+				can.lineWidth = 3;
+				can.rotate((2/(60*1000))*m*Math.PI);
+				can.moveTo(0,20);
+				can.lineTo(0,-90);
+				can.stroke();
+			}
+			
+			//制作秒针
+			function second(s){
+				
+				can.restore();
+				can.save();
+				can.beginPath();
+				can.lineWidth = 1;
+				can.strokeStyle = "#f00";
+				can.rotate((2/(60*1000))*s*Math.PI);
+				can.moveTo(0,30);
+				can.lineTo(0,-110);
+				can.stroke();
+			}
+		</script>
+	</body>
+</html>
